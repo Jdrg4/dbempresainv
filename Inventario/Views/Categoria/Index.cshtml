@@ -1,0 +1,88 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<Inventario.Models.categoria_producto>
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Categoria Productos";
+}
+
+@if (ViewBag.Message != null)
+{
+    <br />
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <input type="button" class="btn btn-primary" onclick="document.location.href = '@Url.Content("~/Categoria/Add")'" value="Nueva Categoria" />
+    </div>
+</div>
+<br />
+
+@using (Html.BeginForm("Index", "Categoria", FormMethod.Get))
+{
+    <div class="row">
+        <input type="text" name="search" placeholder="Nombre de Categoria" class="form-control" />
+        <span class="input-group-btn">
+            <input type="submit" value="Buscar" class="btn btn-default" />
+        </span>
+        
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-bordered">
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th></th>
+            </tr>
+            @foreach (var oCateg in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => oCateg.id)</td>
+                    <td>@Html.DisplayFor(x => oCateg.nombre)</td>
+                    <td>@Html.DisplayFor(x => oCateg.descripcion)</td>
+                    <td>
+                        <input type="button" onclick="document.location.href = '@Url.Content("~/Categoria/Edit/"+oCateg.id)'" class="btn btn-default" value="Editar" />
+                        <input type="button" onclick="jsDelete(@oCateg.id);" class="btn btn-danger" value="Eliminar" />
+                    </td>
+                </tr>
+            }
+        </table>
+        <br />
+        @Html.PagedListPager(Model, i => Url.Action("Index", "Categoria", new { i, search = Request.QueryString["search"] }))
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        function jsDelete(id)
+        {
+            if (confirm("¿Eliminar este elemento?"))
+            {
+                url = "@Url.Content("~/Categoria/Delete")"+ "/" + id;
+                $.post(url, function (data)
+                {
+                    if (data == "1") {
+                        document.location.href = "@Url.Content("~/Categoria/")";
+                    }
+                    else
+                    {
+                        alert("Ocurrió un error :(")
+                    }
+                })
+            }
+        }
+    </script>    
+}
+

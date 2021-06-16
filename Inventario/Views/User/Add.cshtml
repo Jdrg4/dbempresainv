@@ -1,0 +1,51 @@
+﻿@model Inventario.Models.ViewModels.UserViewModel
+@{
+    ViewBag.Title = "Add";
+    List<SelectListItem> roles = (List<SelectListItem>)ViewBag.roles;
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("Add", "User", FormMethod.Post, new { role = "form", @class = "" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationMessage("error", new { @class = "text-danger" })
+
+            @Html.LabelFor(d => d.Documento)
+            @Html.TextBoxFor(d => d.Documento, new { @class = "form-control" })
+            @Html.ValidationMessage("Documento", new { @class = "text-danger" })
+
+            @Html.LabelFor(d => d.Nombre)
+            @Html.TextBoxFor(d => d.Nombre, new { @class = "form-control" })
+            @Html.ValidationMessage("Nombre", new { @class = "text-danger" })
+
+            @Html.LabelFor(d => d.Apellido)
+            @Html.TextBoxFor(d => d.Apellido, new { @class = "form-control" })
+            @Html.ValidationMessage("Apellido", new { @class = "text-danger" })
+
+            @Html.LabelFor(d => d.Correo)
+            @Html.TextBoxFor(d => d.Correo, new { @class = "form-control" })
+            @Html.ValidationMessage("Correo", new { @class = "text-danger" })
+
+            @Html.LabelFor(d => d.Password)
+            @Html.PasswordFor(d => d.Password, new { @class = "form-control" })
+            @Html.ValidationMessage("Password", new { @class = "text-danger" })
+
+            @Html.LabelFor(d => d.ConfirmPassword)
+            @Html.PasswordFor(d => d.ConfirmPassword, new { @class = "form-control" })
+            @Html.ValidationMessage("ConfirmPassword", new { @class = "text-danger" })
+
+            @Html.LabelFor(d=>d.IdRol)
+            @Html.DropDownList("roles", new List<SelectListItem>(roles), "Selecciona un rol", new { @class="form-control"})
+            @*@Html.DropDownListFor(d=>d.IdRol, new List<SelectListItem>(roles), new {@class="form-control"})*@
+            @Html.ValidationMessageFor(d=>d.IdRol)
+
+            <div style="text-align: right;">
+                <input type="submit" class="btn btn-success" value="Guardar" />
+            </div>
+        }
+    </div>
+</div>
+
+

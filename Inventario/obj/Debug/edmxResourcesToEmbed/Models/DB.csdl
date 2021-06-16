@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="dbempresainvModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="dbempresainvEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="rol" EntityType="dbempresainvModel.rol" />
+    <EntitySet Name="user" EntityType="dbempresainvModel.user" />
+    <AssociationSet Name="FK_user_rol" Association="dbempresainvModel.FK_user_rol">
+      <End Role="rol" EntitySet="rol" />
+      <End Role="user" EntitySet="user" />
+    </AssociationSet>
+    <EntitySet Name="modulo" EntityType="dbempresainvModel.modulo" />
+    <EntitySet Name="operacion" EntityType="dbempresainvModel.operacion" />
+    <EntitySet Name="rol_operacion" EntityType="dbempresainvModel.rol_operacion" />
+    <AssociationSet Name="FK_operacion_modulo" Association="dbempresainvModel.FK_operacion_modulo">
+      <End Role="modulo" EntitySet="modulo" />
+      <End Role="operacion" EntitySet="operacion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_rol_operacion_operacion" Association="dbempresainvModel.FK_rol_operacion_operacion">
+      <End Role="operacion" EntitySet="operacion" />
+      <End Role="rol_operacion" EntitySet="rol_operacion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_rol_operacion_rol" Association="dbempresainvModel.FK_rol_operacion_rol">
+      <End Role="rol" EntitySet="rol" />
+      <End Role="rol_operacion" EntitySet="rol_operacion" />
+    </AssociationSet>
+    <FunctionImport Name="sp_buscarProducto" ReturnType="Collection(String)">
+      <Parameter Name="nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="ustate" EntityType="dbempresainvModel.ustate" />
+    <AssociationSet Name="FK_user_ustate" Association="dbempresainvModel.FK_user_ustate">
+      <End Role="ustate" EntitySet="ustate" />
+      <End Role="user" EntitySet="user" />
+    </AssociationSet>
+    <EntitySet Name="inventario" EntityType="dbempresainvModel.inventario" />
+    <EntitySet Name="categoria_producto" EntityType="dbempresainvModel.categoria_producto" />
+    <AssociationSet Name="FK_categoria_producto_ustate" Association="dbempresainvModel.FK_categoria_producto_ustate">
+      <End Role="ustate" EntitySet="ustate" />
+      <End Role="categoria_producto" EntitySet="categoria_producto" />
+    </AssociationSet>
+    <AssociationSet Name="FK_inventario_categoria_producto" Association="dbempresainvModel.FK_inventario_categoria_producto">
+      <End Role="categoria_producto" EntitySet="categoria_producto" />
+      <End Role="inventario" EntitySet="inventario" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="rol">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="user" Relationship="dbempresainvModel.FK_user_rol" FromRole="rol" ToRole="user" />
+    <NavigationProperty Name="rol_operacion" Relationship="dbempresainvModel.FK_rol_operacion_rol" FromRole="rol" ToRole="rol_operacion" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="documento" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="apellido" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="correo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="idRol" Type="Int32" Nullable="false" />
+    <Property Name="idState" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="rol" Relationship="dbempresainvModel.FK_user_rol" FromRole="user" ToRole="rol" />
+    <NavigationProperty Name="ustate" Relationship="dbempresainvModel.FK_user_ustate" FromRole="user" ToRole="ustate" />
+  </EntityType>
+  <Association Name="FK_user_rol">
+    <End Type="dbempresainvModel.rol" Role="rol" Multiplicity="1" />
+    <End Type="dbempresainvModel.user" Role="user" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="rol">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="user">
+        <PropertyRef Name="idRol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="modulo">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="operacion" Relationship="dbempresainvModel.FK_operacion_modulo" FromRole="modulo" ToRole="operacion" />
+  </EntityType>
+  <EntityType Name="operacion">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="idModulo" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="modulo" Relationship="dbempresainvModel.FK_operacion_modulo" FromRole="operacion" ToRole="modulo" />
+    <NavigationProperty Name="rol_operacion" Relationship="dbempresainvModel.FK_rol_operacion_operacion" FromRole="operacion" ToRole="rol_operacion" />
+  </EntityType>
+  <EntityType Name="rol_operacion">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idRol" Type="Int32" Nullable="false" />
+    <Property Name="idOperacion" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="operacion" Relationship="dbempresainvModel.FK_rol_operacion_operacion" FromRole="rol_operacion" ToRole="operacion" />
+    <NavigationProperty Name="rol" Relationship="dbempresainvModel.FK_rol_operacion_rol" FromRole="rol_operacion" ToRole="rol" />
+  </EntityType>
+  <Association Name="FK_operacion_modulo">
+    <End Type="dbempresainvModel.modulo" Role="modulo" Multiplicity="1" />
+    <End Type="dbempresainvModel.operacion" Role="operacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="modulo">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="operacion">
+        <PropertyRef Name="idModulo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_rol_operacion_operacion">
+    <End Type="dbempresainvModel.operacion" Role="operacion" Multiplicity="1" />
+    <End Type="dbempresainvModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="operacion">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="rol_operacion">
+        <PropertyRef Name="idOperacion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_rol_operacion_rol">
+    <End Type="dbempresainvModel.rol" Role="rol" Multiplicity="1" />
+    <End Type="dbempresainvModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="rol">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="rol_operacion">
+        <PropertyRef Name="idRol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ustate">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="user" Relationship="dbempresainvModel.FK_user_ustate" FromRole="ustate" ToRole="user" />
+    <NavigationProperty Name="categoria_producto" Relationship="dbempresainvModel.FK_categoria_producto_ustate" FromRole="ustate" ToRole="categoria_producto" />
+  </EntityType>
+  <Association Name="FK_user_ustate">
+    <End Type="dbempresainvModel.ustate" Role="ustate" Multiplicity="1" />
+    <End Type="dbempresainvModel.user" Role="user" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ustate">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="user">
+        <PropertyRef Name="idState" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="inventario">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="descripcion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="idCategoria" Type="Int32" Nullable="false" />
+    <Property Name="precio" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="idState" Type="Int32" Nullable="false" />
+    <Property Name="fecha" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="categoria_producto" Relationship="dbempresainvModel.FK_inventario_categoria_producto" FromRole="inventario" ToRole="categoria_producto" />
+  </EntityType>
+  <EntityType Name="categoria_producto">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="idState" Type="Int32" />
+    <NavigationProperty Name="ustate" Relationship="dbempresainvModel.FK_categoria_producto_ustate" FromRole="categoria_producto" ToRole="ustate" />
+    <NavigationProperty Name="inventario" Relationship="dbempresainvModel.FK_inventario_categoria_producto" FromRole="categoria_producto" ToRole="inventario" />
+  </EntityType>
+  <Association Name="FK_categoria_producto_ustate">
+    <End Type="dbempresainvModel.ustate" Role="ustate" Multiplicity="0..1" />
+    <End Type="dbempresainvModel.categoria_producto" Role="categoria_producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ustate">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="categoria_producto">
+        <PropertyRef Name="idState" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_inventario_categoria_producto">
+    <End Type="dbempresainvModel.categoria_producto" Role="categoria_producto" Multiplicity="1" />
+    <End Type="dbempresainvModel.inventario" Role="inventario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="categoria_producto">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="inventario">
+        <PropertyRef Name="idCategoria" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

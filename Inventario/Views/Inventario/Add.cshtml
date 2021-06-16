@@ -1,0 +1,37 @@
+﻿@model Inventario.Models.ViewModels.InventarioViewModel
+@{
+    ViewBag.Title = "Añadir Producto";
+    List<SelectListItem> categorias = (List<SelectListItem>)ViewBag.Categorias;
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("Add", "Inventario", FormMethod.Post, new { role = "form", @class = "" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationMessage("error", new { @class = "text-danger" })
+
+            @Html.LabelFor(i => i.Nombre)
+            @Html.TextBoxFor(i => i.Nombre, new { @class = "form-control" })
+            @Html.ValidationMessageFor(i => i.Nombre)
+
+            @Html.LabelFor(i => i.Descripcion)
+            @Html.TextBoxFor(i => i.Descripcion, new { @class = "form-control" })
+            @Html.ValidationMessageFor(i => i.Descripcion)
+
+            @Html.LabelFor(i => i.Precio)
+            @Html.TextBoxFor(i => i.Precio, new { @class = "form-control" })
+            @Html.ValidationMessageFor(i => i.Precio)
+
+            @Html.LabelFor(i => i.IdCategoria)
+            @Html.DropDownListFor(i => i.IdCategoria, new List<SelectListItem>(categorias), new { @class = "form-control" })
+            @Html.ValidationMessageFor(i => i.IdCategoria)
+
+            <div style="text-align:right;">
+                <input type="submit" class="btn btn-success" value="Guardar" />
+            </div>
+        }
+    </div>
+</div>
+

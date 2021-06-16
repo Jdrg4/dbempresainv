@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="aefef699ebd14ebeb3c70438a3c30e94" Name="Diagram1">
+        <EntityTypeShape EntityType="dbempresainvModel.rol" Width="1.5" PointX="0.75" PointY="5.625" />
+        <EntityTypeShape EntityType="dbempresainvModel.user" Width="1.5" PointX="3.25" PointY="1.5" />
+        <AssociationConnector Association="dbempresainvModel.FK_user_rol" />
+        <EntityTypeShape EntityType="dbempresainvModel.modulo" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="dbempresainvModel.operacion" Width="1.5" PointX="0.75" PointY="8.5" />
+        <EntityTypeShape EntityType="dbempresainvModel.rol_operacion" Width="1.5" PointX="3" PointY="8.5" />
+        <AssociationConnector Association="dbempresainvModel.FK_operacion_modulo" />
+        <AssociationConnector Association="dbempresainvModel.FK_rol_operacion_operacion" />
+        <AssociationConnector Association="dbempresainvModel.FK_rol_operacion_rol" />
+        <EntityTypeShape EntityType="dbempresainvModel.ustate" Width="1.5" PointX="6.25" PointY="2.875" />
+        <AssociationConnector Association="dbempresainvModel.FK_user_ustate" />
+        <EntityTypeShape EntityType="dbempresainvModel.inventario" Width="1.5" PointX="3" PointY="12.125" />
+        <EntityTypeShape EntityType="dbempresainvModel.categoria_producto" Width="1.5" PointX="8.5" PointY="2.625" />
+        <AssociationConnector Association="dbempresainvModel.FK_categoria_producto_ustate" />
+        <AssociationConnector Association="dbempresainvModel.FK_inventario_categoria_producto" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

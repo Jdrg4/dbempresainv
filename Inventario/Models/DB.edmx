@@ -1,0 +1,527 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="dbempresainvModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="categoria_producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="idState" Type="int" />
+        </EntityType>
+        <EntityType Name="inventario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="idCategoria" Type="int" Nullable="false" />
+          <Property Name="precio" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="idState" Type="int" Nullable="false" />
+          <Property Name="fecha" Type="smalldatetime" />
+        </EntityType>
+        <EntityType Name="modulo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="operacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="idModulo" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="rol_operacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idRol" Type="int" Nullable="false" />
+          <Property Name="idOperacion" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="documento" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="apellido" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="correo" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="idRol" Type="int" Nullable="false" />
+          <Property Name="idState" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ustate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_categoria_producto_ustate">
+          <End Role="ustate" Type="Self.ustate" Multiplicity="0..1" />
+          <End Role="categoria_producto" Type="Self.categoria_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ustate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="categoria_producto">
+              <PropertyRef Name="idState" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_inventario_categoria_producto">
+          <End Role="categoria_producto" Type="Self.categoria_producto" Multiplicity="1" />
+          <End Role="inventario" Type="Self.inventario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoria_producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="inventario">
+              <PropertyRef Name="idCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_operacion_modulo">
+          <End Role="modulo" Type="Self.modulo" Multiplicity="1" />
+          <End Role="operacion" Type="Self.operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="modulo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="operacion">
+              <PropertyRef Name="idModulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rol_operacion_operacion">
+          <End Role="operacion" Type="Self.operacion" Multiplicity="1" />
+          <End Role="rol_operacion" Type="Self.rol_operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rol_operacion">
+              <PropertyRef Name="idOperacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rol_operacion_rol">
+          <End Role="rol" Type="Self.rol" Multiplicity="1" />
+          <End Role="rol_operacion" Type="Self.rol_operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rol_operacion">
+              <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_rol">
+          <End Role="rol" Type="Self.rol" Multiplicity="1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_ustate">
+          <End Role="ustate" Type="Self.ustate" Multiplicity="1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ustate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idState" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_buscarProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nombre" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="dbempresainvModelStoreContainer">
+          <EntitySet Name="categoria_producto" EntityType="Self.categoria_producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="inventario" EntityType="Self.inventario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="modulo" EntityType="Self.modulo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="operacion" EntityType="Self.operacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rol" EntityType="Self.rol" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rol_operacion" EntityType="Self.rol_operacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ustate" EntityType="Self.ustate" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_categoria_producto_ustate" Association="Self.FK_categoria_producto_ustate">
+            <End Role="ustate" EntitySet="ustate" />
+            <End Role="categoria_producto" EntitySet="categoria_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_inventario_categoria_producto" Association="Self.FK_inventario_categoria_producto">
+            <End Role="categoria_producto" EntitySet="categoria_producto" />
+            <End Role="inventario" EntitySet="inventario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_operacion_modulo" Association="Self.FK_operacion_modulo">
+            <End Role="modulo" EntitySet="modulo" />
+            <End Role="operacion" EntitySet="operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rol_operacion_operacion" Association="Self.FK_rol_operacion_operacion">
+            <End Role="operacion" EntitySet="operacion" />
+            <End Role="rol_operacion" EntitySet="rol_operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rol_operacion_rol" Association="Self.FK_rol_operacion_rol">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="rol_operacion" EntitySet="rol_operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_rol" Association="Self.FK_user_rol">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_ustate" Association="Self.FK_user_ustate">
+            <End Role="ustate" EntitySet="ustate" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbempresainvModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="dbempresainvEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="rol" EntityType="dbempresainvModel.rol" />
+          <EntitySet Name="user" EntityType="dbempresainvModel.user" />
+          <AssociationSet Name="FK_user_rol" Association="dbempresainvModel.FK_user_rol">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <EntitySet Name="modulo" EntityType="dbempresainvModel.modulo" />
+          <EntitySet Name="operacion" EntityType="dbempresainvModel.operacion" />
+          <EntitySet Name="rol_operacion" EntityType="dbempresainvModel.rol_operacion" />
+          <AssociationSet Name="FK_operacion_modulo" Association="dbempresainvModel.FK_operacion_modulo">
+            <End Role="modulo" EntitySet="modulo" />
+            <End Role="operacion" EntitySet="operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rol_operacion_operacion" Association="dbempresainvModel.FK_rol_operacion_operacion">
+            <End Role="operacion" EntitySet="operacion" />
+            <End Role="rol_operacion" EntitySet="rol_operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rol_operacion_rol" Association="dbempresainvModel.FK_rol_operacion_rol">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="rol_operacion" EntitySet="rol_operacion" />
+          </AssociationSet>
+          <FunctionImport Name="sp_buscarProducto" ReturnType="Collection(String)">
+          <Parameter Name="nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="ustate" EntityType="dbempresainvModel.ustate" />
+          <AssociationSet Name="FK_user_ustate" Association="dbempresainvModel.FK_user_ustate">
+            <End Role="ustate" EntitySet="ustate" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <EntitySet Name="inventario" EntityType="dbempresainvModel.inventario" />
+          <EntitySet Name="categoria_producto" EntityType="dbempresainvModel.categoria_producto" />
+          <AssociationSet Name="FK_categoria_producto_ustate" Association="dbempresainvModel.FK_categoria_producto_ustate">
+            <End Role="ustate" EntitySet="ustate" />
+            <End Role="categoria_producto" EntitySet="categoria_producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_inventario_categoria_producto" Association="dbempresainvModel.FK_inventario_categoria_producto">
+            <End Role="categoria_producto" EntitySet="categoria_producto" />
+            <End Role="inventario" EntitySet="inventario" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="user" Relationship="dbempresainvModel.FK_user_rol" FromRole="rol" ToRole="user" />
+          <NavigationProperty Name="rol_operacion" Relationship="dbempresainvModel.FK_rol_operacion_rol" FromRole="rol" ToRole="rol_operacion" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="documento" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="apellido" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="correo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="idRol" Type="Int32" Nullable="false" />
+          <Property Name="idState" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="rol" Relationship="dbempresainvModel.FK_user_rol" FromRole="user" ToRole="rol" />
+          <NavigationProperty Name="ustate" Relationship="dbempresainvModel.FK_user_ustate" FromRole="user" ToRole="ustate" />
+        </EntityType>
+        <Association Name="FK_user_rol">
+          <End Type="dbempresainvModel.rol" Role="rol" Multiplicity="1" />
+          <End Type="dbempresainvModel.user" Role="user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="modulo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="operacion" Relationship="dbempresainvModel.FK_operacion_modulo" FromRole="modulo" ToRole="operacion" />
+        </EntityType>
+        <EntityType Name="operacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="idModulo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="modulo" Relationship="dbempresainvModel.FK_operacion_modulo" FromRole="operacion" ToRole="modulo" />
+          <NavigationProperty Name="rol_operacion" Relationship="dbempresainvModel.FK_rol_operacion_operacion" FromRole="operacion" ToRole="rol_operacion" />
+        </EntityType>
+        <EntityType Name="rol_operacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idRol" Type="Int32" Nullable="false" />
+          <Property Name="idOperacion" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="operacion" Relationship="dbempresainvModel.FK_rol_operacion_operacion" FromRole="rol_operacion" ToRole="operacion" />
+          <NavigationProperty Name="rol" Relationship="dbempresainvModel.FK_rol_operacion_rol" FromRole="rol_operacion" ToRole="rol" />
+        </EntityType>
+        <Association Name="FK_operacion_modulo">
+          <End Type="dbempresainvModel.modulo" Role="modulo" Multiplicity="1" />
+          <End Type="dbempresainvModel.operacion" Role="operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="modulo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="operacion">
+              <PropertyRef Name="idModulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rol_operacion_operacion">
+          <End Type="dbempresainvModel.operacion" Role="operacion" Multiplicity="1" />
+          <End Type="dbempresainvModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rol_operacion">
+              <PropertyRef Name="idOperacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rol_operacion_rol">
+          <End Type="dbempresainvModel.rol" Role="rol" Multiplicity="1" />
+          <End Type="dbempresainvModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rol_operacion">
+              <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ustate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="user" Relationship="dbempresainvModel.FK_user_ustate" FromRole="ustate" ToRole="user" />
+          <NavigationProperty Name="categoria_producto" Relationship="dbempresainvModel.FK_categoria_producto_ustate" FromRole="ustate" ToRole="categoria_producto" />
+        </EntityType>
+        <Association Name="FK_user_ustate">
+          <End Type="dbempresainvModel.ustate" Role="ustate" Multiplicity="1" />
+          <End Type="dbempresainvModel.user" Role="user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ustate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idState" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="inventario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="idCategoria" Type="Int32" Nullable="false" />
+          <Property Name="precio" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="idState" Type="Int32" Nullable="false" />
+          <Property Name="fecha" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="categoria_producto" Relationship="dbempresainvModel.FK_inventario_categoria_producto" FromRole="inventario" ToRole="categoria_producto" />
+        </EntityType>
+        <EntityType Name="categoria_producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="idState" Type="Int32" />
+          <NavigationProperty Name="ustate" Relationship="dbempresainvModel.FK_categoria_producto_ustate" FromRole="categoria_producto" ToRole="ustate" />
+          <NavigationProperty Name="inventario" Relationship="dbempresainvModel.FK_inventario_categoria_producto" FromRole="categoria_producto" ToRole="inventario" />
+        </EntityType>
+        <Association Name="FK_categoria_producto_ustate">
+          <End Type="dbempresainvModel.ustate" Role="ustate" Multiplicity="0..1" />
+          <End Type="dbempresainvModel.categoria_producto" Role="categoria_producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ustate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="categoria_producto">
+              <PropertyRef Name="idState" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_inventario_categoria_producto">
+          <End Type="dbempresainvModel.categoria_producto" Role="categoria_producto" Multiplicity="1" />
+          <End Type="dbempresainvModel.inventario" Role="inventario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoria_producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="inventario">
+              <PropertyRef Name="idCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbempresainvModelStoreContainer" CdmEntityContainer="dbempresainvEntities">
+          <EntitySetMapping Name="rol">
+            <EntityTypeMapping TypeName="dbempresainvModel.rol">
+              <MappingFragment StoreEntitySet="rol">
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="dbempresainvModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="idState" ColumnName="idState" />
+                <ScalarProperty Name="idRol" ColumnName="idRol" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="documento" ColumnName="documento" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="modulo">
+            <EntityTypeMapping TypeName="dbempresainvModel.modulo">
+              <MappingFragment StoreEntitySet="modulo">
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="operacion">
+            <EntityTypeMapping TypeName="dbempresainvModel.operacion">
+              <MappingFragment StoreEntitySet="operacion">
+                <ScalarProperty Name="idModulo" ColumnName="idModulo" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rol_operacion">
+            <EntityTypeMapping TypeName="dbempresainvModel.rol_operacion">
+              <MappingFragment StoreEntitySet="rol_operacion">
+                <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
+                <ScalarProperty Name="idRol" ColumnName="idRol" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_buscarProducto" FunctionName="dbempresainvModel.Store.sp_buscarProducto" />
+          <EntitySetMapping Name="ustate">
+            <EntityTypeMapping TypeName="dbempresainvModel.ustate">
+              <MappingFragment StoreEntitySet="ustate">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="inventario">
+            <EntityTypeMapping TypeName="dbempresainvModel.inventario">
+              <MappingFragment StoreEntitySet="inventario">
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="idState" ColumnName="idState" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="idCategoria" ColumnName="idCategoria" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="categoria_producto">
+            <EntityTypeMapping TypeName="dbempresainvModel.categoria_producto">
+              <MappingFragment StoreEntitySet="categoria_producto">
+                <ScalarProperty Name="idState" ColumnName="idState" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
